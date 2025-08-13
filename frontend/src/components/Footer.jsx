@@ -1,7 +1,8 @@
 import React from 'react';
-import { Heart, Instagram, Twitter, Facebook, Youtube, Mail, Phone } from 'lucide-react';
+import { Heart, Instagram, Twitter, Facebook, Youtube, Music, Mail, Phone } from 'lucide-react';
 import { Button } from './ui/button';
-import { ronaldinhoData } from '../data/mock';
+import { useSocialLinks } from '../hooks/useApi';
+import LoadingSpinner from './LoadingSpinner';
 
 const Footer = () => {
   const socialIcons = {
