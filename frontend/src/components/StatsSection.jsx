@@ -2,15 +2,44 @@ import React from 'react';
 import { Trophy, Target, Users, Calendar, TrendingUp, Star } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { ronaldinhoData } from '../data/mock';
+import { useStatistics } from '../hooks/useApi';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorMessage from './ErrorMessage';
 
 const StatsSection = () => {
+  const { data: statsData, loading, error, refetch } = useStatistics();
+
   const iconMap = {
     matchs: Users,
     buts: Target,
     passes: TrendingUp,
     trophees: Trophy
   };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-yellow-50 to-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <LoadingSpinner size="large" />
+          <p className="mt-4 text-gray-600">Chargement des statistiques...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-yellow-50 to-gray-50">
+        <div className="container mx-auto px-4">
+          <ErrorMessage message={error} onRetry={refetch} />
+        </div>
+      </section>
+    );
+  }
+
+  if (!statsData) {
+    return null;
+  }
 
   return (
     <section id="statistiques" className="py-20 bg-gradient-to-b from-yellow-50 to-gray-50">
@@ -21,13 +50,13 @@ const StatsSection = () => {
             Records & Palmarès
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {ronaldinhoData.statistiques.title}
+            Statistiques & Palmarès
           </h2>
         </div>
 
         {/* Main Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {Object.entries(ronaldinhoData.statistiques.records).map(([key, value]) => {
+          {Object.entries(statsData.records || {}).map(([key, value]) => {
             const Icon = iconMap[key];
             return (
               <Card key={key} className="text-center group hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
@@ -59,7 +88,7 @@ const StatsSection = () => {
             </CardHeader>
             <CardContent className="p-0">
               <div className="space-y-0">
-                {ronaldinhoData.statistiques.clubs.map((club, index) => (
+                {statsData.clubs?.map((club, index) => (
                   <div key={index} className="flex items-center justify-between p-6 border-b last:border-b-0 hover:bg-gray-50 transition-colors duration-200">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-green-500 rounded-full flex items-center justify-center">
@@ -79,7 +108,7 @@ const StatsSection = () => {
                       <div className="text-xs text-gray-500">{club.matchs} matchs</div>
                     </div>
                   </div>
-                ))}
+                )) || []}
               </div>
             </CardContent>
           </Card>
@@ -94,12 +123,12 @@ const StatsSection = () => {
             </CardHeader>
             <CardContent className="p-6">
               <div className="grid gap-3">
-                {ronaldinhoData.statistiques.titres.map((titre, index) => (
+                {statsData.titres?.map((titre, index) => (
                   <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors duration-200">
                     <Star className="w-5 h-5 text-yellow-500 flex-shrink-0" />
                     <span className="text-gray-800 font-medium">{titre}</span>
                   </div>
-                ))}
+                )) || []}
               </div>
             </CardContent>
           </Card>
