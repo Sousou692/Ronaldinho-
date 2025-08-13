@@ -234,31 +234,37 @@ async def seed_data():
     )
     await statistics_collection.insert_one(stats_data.dict())
     
-    # Social links
+    # Social links - Vrais comptes officiels de Ronaldinho
     social_links = [
         SocialLink(
             nom="Instagram",
-            url="https://instagram.com/ronaldinho",
+            url="https://www.instagram.com/ronaldinho/",
             icon="instagram",
             ordre=1
         ),
         SocialLink(
             nom="Twitter",
-            url="https://twitter.com/ronaldinho",
+            url="https://twitter.com/10ronaldinho",
             icon="twitter",
             ordre=2
         ),
         SocialLink(
             nom="Facebook",
-            url="https://facebook.com/ronaldinho",
+            url="https://www.facebook.com/Ronaldinho/",
             icon="facebook",
             ordre=3
         ),
         SocialLink(
             nom="YouTube",
-            url="https://youtube.com/ronaldinho",
+            url="https://www.youtube.com/@ronaldinho",
             icon="youtube",
             ordre=4
+        ),
+        SocialLink(
+            nom="TikTok",
+            url="https://www.tiktok.com/@ronaldinho",
+            icon="music",
+            ordre=5
         )
     ]
     
