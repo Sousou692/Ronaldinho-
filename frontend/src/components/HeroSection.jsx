@@ -1,7 +1,9 @@
 import React from 'react';
 import { ChevronDown, Play } from 'lucide-react';
 import { Button } from './ui/button';
-import { ronaldinhoData } from '../data/mock';
+import { useHero } from '../hooks/useApi';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorMessage from './ErrorMessage';
 
 const HeroSection = () => {
   const scrollToNext = () => {
