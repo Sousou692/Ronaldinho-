@@ -6,6 +6,8 @@ import LoadingSpinner from './LoadingSpinner';
 import ErrorMessage from './ErrorMessage';
 
 const HeroSection = () => {
+  const { data: heroData, loading, error, refetch } = useHero();
+
   const scrollToNext = () => {
     const element = document.getElementById('entraînements');
     if (element) {
@@ -13,12 +15,32 @@ const HeroSection = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-gray-100">
+        <LoadingSpinner size="large" />
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-gray-100">
+        <ErrorMessage message={error} onRetry={refetch} />
+      </section>
+    );
+  }
+
+  if (!heroData) {
+    return null;
+  }
+
   return (
     <section id="accueil" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
-          src={ronaldinhoData.hero.image}
+          src={heroData.image}
           alt="Ronaldinho"
           className="w-full h-full object-cover"
         />
@@ -37,18 +59,18 @@ const HeroSection = () => {
           {/* Main Title */}
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             <span className="bg-gradient-to-r from-yellow-400 to-green-400 bg-clip-text text-transparent">
-              {ronaldinhoData.hero.title}
+              {heroData.title}
             </span>
           </h1>
 
           {/* Subtitle */}
           <h2 className="text-xl md:text-2xl text-gray-200 mb-8 font-light">
-            {ronaldinhoData.hero.subtitle}
+            {heroData.subtitle}
           </h2>
 
           {/* Description */}
           <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
-            {ronaldinhoData.hero.description}
+            {heroData.description}
           </p>
 
           {/* Action Buttons */}
@@ -73,19 +95,19 @@ const HeroSection = () => {
           {/* Stats Preview */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-400 mb-2">26</div>
+              <div className="text-3xl font-bold text-yellow-400 mb-2">{heroData.stats.trophees}</div>
               <div className="text-sm text-gray-300 uppercase tracking-wide">Trophées</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 mb-2">207</div>
+              <div className="text-3xl font-bold text-green-400 mb-2">{heroData.stats.matchs}</div>
               <div className="text-sm text-gray-300 uppercase tracking-wide">Matchs</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-400 mb-2">94</div>
+              <div className="text-3xl font-bold text-yellow-400 mb-2">{heroData.stats.buts}</div>
               <div className="text-sm text-gray-300 uppercase tracking-wide">Buts</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-400 mb-2">1</div>
+              <div className="text-3xl font-bold text-green-400 mb-2">{heroData.stats.ballonOr}</div>
               <div className="text-sm text-gray-300 uppercase tracking-wide">Ballon d'Or</div>
             </div>
           </div>
