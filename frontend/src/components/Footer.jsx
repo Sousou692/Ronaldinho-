@@ -5,11 +5,14 @@ import { useSocialLinks } from '../hooks/useApi';
 import LoadingSpinner from './LoadingSpinner';
 
 const Footer = () => {
+  const { data: socialLinks, loading: socialLoading } = useSocialLinks();
+  
   const socialIcons = {
     instagram: Instagram,
     twitter: Twitter,
     facebook: Facebook,
-    youtube: Youtube
+    youtube: Youtube,
+    music: Music // Pour TikTok
   };
 
   const scrollToTop = () => {
@@ -40,20 +43,25 @@ const Footer = () => {
             
             {/* Social Media */}
             <div className="flex space-x-4">
-              {ronaldinhoData.reseauxSociaux.map((social) => {
-                const Icon = socialIcons[social.icon];
-                return (
-                  <Button
-                    key={social.nom}
-                    variant="outline"
-                    size="icon"
-                    className="border-gray-600 hover:border-yellow-400 hover:bg-yellow-400 hover:text-black transition-all duration-300"
-                    onClick={() => window.open(social.url, '_blank')}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </Button>
-                );
-              })}
+              {socialLoading ? (
+                <LoadingSpinner size="small" />
+              ) : (
+                socialLinks?.map((social) => {
+                  const Icon = socialIcons[social.icon];
+                  return (
+                    <Button
+                      key={social.nom}
+                      variant="outline"
+                      size="icon"
+                      className="border-gray-600 hover:border-yellow-400 hover:bg-yellow-400 hover:text-black transition-all duration-300"
+                      onClick={() => window.open(social.url, '_blank')}
+                      title={`Suivre sur ${social.nom}`}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </Button>
+                  );
+                })
+              )}
             </div>
           </div>
 
